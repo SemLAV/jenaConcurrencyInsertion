@@ -8,6 +8,9 @@ import com.hp.hpl.jena.shared.LockSRMW;
 public class GlobalModel {
 
 	private static Model model_ = null;
+	public static int readFail = 0;
+	public static int writeFail = 0;
+	public static boolean poolEnd = false;
 
 	private GlobalModel() {
 

@@ -52,8 +52,11 @@ public class WorkerThread implements Runnable {
 //					 model_.enterCriticalSection(LockMRSW.WRITE);
 					Resource ressource = model_.createResource("uri_" + i);
 					ressource.addProperty(FOAF.name, "literal_" + i);
+				} catch(Exception e) {
+					System.out.println("-->writeFail : " +(++GlobalModel.writeFail) +" : "+ System.currentTimeMillis());
 				} finally {
 					model_.leaveCriticalSection();
+
 				}
 			}
 		

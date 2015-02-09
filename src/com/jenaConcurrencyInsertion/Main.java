@@ -26,6 +26,8 @@ public class Main {
 		int maxNbInsertionsInJobs = 100000000;
 		int nbInsertionsInJobs = 100000000;
 
+		System.out.println("-->startTime : " + System.currentTimeMillis());
+
 		Thread t = new Thread(new QueryThread());
 		t.start();
 		
