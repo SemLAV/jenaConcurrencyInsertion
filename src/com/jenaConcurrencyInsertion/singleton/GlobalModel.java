@@ -7,19 +7,24 @@ import com.hp.hpl.jena.shared.LockSRMW;
 
 public class GlobalModel {
 
+	public static boolean isLockSRMW = true;
 	private static Model model_ = null;
 	public static int readFail = 0;
 	public static int writeFail = 0;
 	public static boolean poolEnd = false;
+
 
 	private GlobalModel() {
 
 	}
 
 	public static Model getInstance() {
-		if (model_ == null)
-			model_ = ModelFactory.createDefaultModel(new LockSRMW());
-		// model_ = ModelFactory.createDefaultModel(new LockMRSW());
+		if (model_ == null) {
+			if(isLockSRMW)
+				model_ = ModelFactory.createDefaultModel(new LockSRMW());
+			else
+				model_ = ModelFactory.createDefaultModel(new LockMRSW());
+		}
 
 		return model_;
 	}

@@ -10,6 +10,8 @@ import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.shared.LockMRSW;
 import com.hp.hpl.jena.shared.LockSRMW;
 import com.jenaConcurrencyInsertion.singleton.GlobalModel;
 import com.jenaConcurrencyInsertion.utils.WriteFile;
@@ -55,8 +57,10 @@ public class QueryThread implements Runnable {
 
 	private void query() {
 		try {
-			model_.enterCriticalSection(LockSRMW.READ);
-//			 model_.enterCriticalSection(LockMRSW.READ);
+			if(GlobalModel.isLockSRMW)
+				model_ = ModelFactory.createDefaultModel(new LockSRMW());
+			else
+				model_ = ModelFactory.createDefaultModel(new LockMRSW());
 
 			WriteFile.write("\t \t [" + dateFormat_.format(new Date())
 					+ "] Lock Read \n");

@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.shared.LockMRSW;
 import com.hp.hpl.jena.shared.LockSRMW;
@@ -48,8 +49,10 @@ public class WorkerThread implements Runnable {
 
 			for (int i = startIndex_; i < (startIndex_ + nbInsertionsInJobs_); i++) {
 				try {
-					model_.enterCriticalSection(LockSRMW.WRITE);
-//					 model_.enterCriticalSection(LockMRSW.WRITE);
+					if(GlobalModel.isLockSRMW)
+						model_ = ModelFactory.createDefaultModel(new LockSRMW());
+					else
+						model_ = ModelFactory.createDefaultModel(new LockMRSW());
 					Resource ressource = model_.createResource("uri_" + i);
 					ressource.addProperty(FOAF.name, "literal_" + i);
 				} catch(Exception e) {
