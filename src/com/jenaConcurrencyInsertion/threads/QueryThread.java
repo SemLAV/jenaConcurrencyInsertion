@@ -9,8 +9,8 @@ import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.ResultSet;
+import com.hp.hpl.jena.query.ResultSetFormatter;
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.shared.LockMRSW;
 import com.hp.hpl.jena.shared.LockSRMW;
 import com.jenaConcurrencyInsertion.singleton.GlobalModel;
@@ -35,11 +35,8 @@ public class QueryThread implements Runnable {
 			e.printStackTrace();
 		}
 
-		while (!GlobalModel.poolEnd)
+		while (true)
 			processQuery();
-		processQuery();
-		System.out.println("-->endTimeQuery : " + System.currentTimeMillis());
-		System.out.println("-->endTimeQuery : Read Fail : " + GlobalModel.readFail);
 	}
 
 	private void processQuery() {
@@ -57,10 +54,8 @@ public class QueryThread implements Runnable {
 
 	private void query() {
 		try {
-			if(GlobalModel.isLockSRMW)
-				model_ = ModelFactory.createDefaultModel(new LockSRMW());
-			else
-				model_ = ModelFactory.createDefaultModel(new LockMRSW());
+			model_.enterCriticalSection(LockSRMW.READ);
+//			 model_.enterCriticalSection(LockMRSW.READ);
 
 			WriteFile.write("\t \t [" + dateFormat_.format(new Date())
 					+ "] Lock Read \n");
@@ -71,7 +66,7 @@ public class QueryThread implements Runnable {
 			QueryExecution qexec = QueryExecutionFactory.create(query, model_);
 			try {
 				ResultSet results = qexec.execSelect();
-				//ResultSetFormatter.out(System.out, results, query);
+				ResultSetFormatter.out(System.out, results, query);
 				
 				WriteFile.write("\t \t \t [" + dateFormat_.format(new Date())
 						+ "] nbTriples : " + results.getRowNumber() + " \n");
@@ -79,8 +74,6 @@ public class QueryThread implements Runnable {
 			} finally {
 				qexec.close();
 			}
-		} catch(Exception e) {
-			System.out.println("-->readFail : " +(++GlobalModel.readFail) +" : "+ System.currentTimeMillis());
 		} finally {
 			model_.leaveCriticalSection();
 			WriteFile.write("\t \t [" + dateFormat_.format(new Date())

@@ -1,7 +1,5 @@
 package com.jenaConcurrencyInsertion.threadPool;
 
-import com.jenaConcurrencyInsertion.singleton.GlobalModel;
-
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -41,11 +39,9 @@ public class ThreadPool {
 	     executor.shutdown();
 	     
 	     while (!executor.isTerminated()) {}
-
-		 GlobalModel.poolEnd = true;
-		 System.out.println("-->endTimePool : " + System.currentTimeMillis());
-		 System.out.println("-->endTimePool : Write Fail : " + GlobalModel.writeFail);
-	     System.out.println("Finished all workers threads");
+	     
+	     System.out.println("Finished all threads");
+	     System.exit(0);
 	        
 //	     Model model = GlobalModel.getInstance();
 //	     

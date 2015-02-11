@@ -5,7 +5,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.jenaConcurrencyInsertion.singleton.GlobalModel;
 import com.jenaConcurrencyInsertion.threadPool.ThreadPool;
 import com.jenaConcurrencyInsertion.threads.ModelSizeThread;
 import com.jenaConcurrencyInsertion.threads.QueryThread;
@@ -26,11 +25,6 @@ public class Main {
 		// Size of the views
 		int maxNbInsertionsInJobs = 100000000;
 		int nbInsertionsInJobs = 100000000;
-
-		// Use LockSRMW
-		GlobalModel.isLockSRMW = true;
-
-		System.out.println("-->startTime : " + System.currentTimeMillis());
 
 		Thread t = new Thread(new QueryThread());
 		t.start();
