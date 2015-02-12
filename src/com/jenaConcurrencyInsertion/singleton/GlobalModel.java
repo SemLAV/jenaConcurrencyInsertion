@@ -8,6 +8,11 @@ import com.hp.hpl.jena.shared.LockSRMW;
 public class GlobalModel {
 
 	private static Model model_ = null;
+	public static long nbLockWrite = 0;
+	public static double avgLockWrite = 0.0;
+	public static long nbLockRead = 0;
+	public static double avgLockRead = 0.0;
+	public static boolean isLockSRMW = true;
 
 	private GlobalModel() {
 
@@ -15,8 +20,10 @@ public class GlobalModel {
 
 	public static Model getInstance() {
 		if (model_ == null)
-			model_ = ModelFactory.createDefaultModel(new LockSRMW());
-		// model_ = ModelFactory.createDefaultModel(new LockMRSW());
+			if(isLockSRMW)
+				model_ = ModelFactory.createDefaultModel(new LockSRMW());
+			else
+		 		model_ = ModelFactory.createDefaultModel(new LockMRSW());
 
 		return model_;
 	}

@@ -40,11 +40,7 @@ public class QueryThread implements Runnable {
 	}
 
 	private void processQuery() {
-		WriteFile.write("\t [" + dateFormat_.format(new Date())
-				+ "] Process Query \n");
 		query();
-		WriteFile
-				.write("\t [" + dateFormat_.format(new Date()) + "] End Query \n");
 		try {
 			Thread.sleep(5000);
 		} catch (InterruptedException e) {
@@ -54,11 +50,14 @@ public class QueryThread implements Runnable {
 
 	private void query() {
 		try {
-			model_.enterCriticalSection(LockSRMW.READ);
-//			 model_.enterCriticalSection(LockMRSW.READ);
+			long start = System.currentTimeMillis();
+			if(GlobalModel.isLockSRMW)
+				model_.enterCriticalSection(LockSRMW.READ);
+			else
+				model_.enterCriticalSection(LockMRSW.READ);
 
-			WriteFile.write("\t \t [" + dateFormat_.format(new Date())
-					+ "] Lock Read \n");
+			GlobalModel.avgLockRead = (GlobalModel.avgLockRead*GlobalModel.nbLockRead+System.currentTimeMillis() - start)/++GlobalModel.nbLockRead;
+
 
 			String queryString = "PREFIX foaf: <http://xmlns.com/foaf/0.1/>"
 					+ "SELECT * " + "WHERE { 'uri_100' ?p ?o}";
@@ -66,18 +65,13 @@ public class QueryThread implements Runnable {
 			QueryExecution qexec = QueryExecutionFactory.create(query, model_);
 			try {
 				ResultSet results = qexec.execSelect();
-				ResultSetFormatter.out(System.out, results, query);
-				
-				WriteFile.write("\t \t \t [" + dateFormat_.format(new Date())
-						+ "] nbTriples : " + results.getRowNumber() + " \n");
+				//ResultSetFormatter.out(System.out, results, query);
 				
 			} finally {
 				qexec.close();
 			}
 		} finally {
 			model_.leaveCriticalSection();
-			WriteFile.write("\t \t [" + dateFormat_.format(new Date())
-					+ "] Lock Release \n");
 		}
 	}
 

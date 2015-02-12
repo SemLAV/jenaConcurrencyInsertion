@@ -17,29 +17,18 @@ public class WorkerThread implements Runnable {
 	private Model model_;
 	private int startIndex_;
 	private int nbInsertionsInJobs_;
-	private boolean verbose_;
 	private DateFormat dateFormat_;
 
-	public WorkerThread(int index, int nbInsertionsInJobs, boolean verbose) {
+	public WorkerThread(int index, int nbInsertionsInJobs) {
 		model_ = GlobalModel.getInstance();
 		startIndex_ = index;
 		nbInsertionsInJobs_ = nbInsertionsInJobs;
-		verbose_ = verbose;
 		dateFormat_ = new SimpleDateFormat("HH:mm:ss");
 	}
 
 	@Override
 	public void run() {
-
-		if (verbose_)
-			WriteFile.write("\t [" + dateFormat_.format(new Date())
-					+ "] Start - " + Thread.currentThread().getName() + " \n");
-
 		processInsertion();
-
-		if (verbose_)
-			WriteFile.write("\t [" + dateFormat_.format(new Date())
-					+ "] End - " + Thread.currentThread().getName() + " \n");
 	}
 
 	private void processInsertion() {
@@ -48,8 +37,14 @@ public class WorkerThread implements Runnable {
 
 			for (int i = startIndex_; i < (startIndex_ + nbInsertionsInJobs_); i++) {
 				try {
-					model_.enterCriticalSection(LockSRMW.WRITE);
-//					 model_.enterCriticalSection(LockMRSW.WRITE);
+					long start = System.currentTimeMillis();
+					if(GlobalModel.isLockSRMW)
+						model_.enterCriticalSection(LockSRMW.WRITE);
+					else
+						model_.enterCriticalSection(LockMRSW.WRITE);
+					GlobalModel.avgLockWrite = (GlobalModel.avgLockWrite*GlobalModel.nbLockWrite+System.currentTimeMillis() - start)/++GlobalModel.nbLockWrite;
+					//System.out.println(System.currentTimeMillis() - start);
+//
 					Resource ressource = model_.createResource("uri_" + i);
 					ressource.addProperty(FOAF.name, "literal_" + i);
 				} finally {

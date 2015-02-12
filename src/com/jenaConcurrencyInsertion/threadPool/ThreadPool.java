@@ -11,14 +11,12 @@ public class ThreadPool {
 	private int nbWorkers_;
 	private int maxNbInsertionsInJobs_;
 	private int nbInsertionsInJobs_;
-	private boolean verbose_;
 	
-	 public ThreadPool(int nbJobs, int nbWorkers, int maxNbInsertionsInJobs, int nbInsertionsInJobs, boolean verbose) {
+	 public ThreadPool(int nbJobs, int nbWorkers, int maxNbInsertionsInJobs, int nbInsertionsInJobs) {
 		  nbJobs_ = nbJobs;
 	      nbWorkers_ = nbWorkers;
 	      maxNbInsertionsInJobs_ = maxNbInsertionsInJobs;
 	      nbInsertionsInJobs_ = nbInsertionsInJobs;
-	      verbose_ = verbose;
 		 
 	      startIndexes_ = new ArrayList<Integer>();
 	      for (int i = 0; i <= nbJobs_; i++){
@@ -33,7 +31,7 @@ public class ThreadPool {
 		 
 		 ExecutorService executor = Executors.newFixedThreadPool(nbWorkers_);
 	     for (int i = 0; i <= startIndexes_.size() - 1; i++) {
-	         Runnable worker = new WorkerThread(startIndexes_.get(i), nbInsertionsInJobs_, verbose_);
+	         Runnable worker = new WorkerThread(startIndexes_.get(i), nbInsertionsInJobs_);
 	         executor.execute(worker);
 	     }
 	     executor.shutdown();

@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.jenaConcurrencyInsertion.threadPool.ThreadPool;
-import com.jenaConcurrencyInsertion.threads.ModelSizeThread;
+import com.jenaConcurrencyInsertion.threads.LockLogThread;
 import com.jenaConcurrencyInsertion.threads.QueryThread;
 import com.jenaConcurrencyInsertion.utils.WriteFile;
 
@@ -30,14 +30,10 @@ public class Main {
 		t.start();
 		
 		// Display model size each 10 seconds
-		Thread tModel = new Thread(new ModelSizeThread());
+		Thread tModel = new Thread(new LockLogThread());
 		tModel.start();
 
-		// Display start and stop for each thread
-		boolean verbose = false;
-
-		ThreadPool threadPool = new ThreadPool(nbJobs, nbWorkers,
-				maxNbInsertionsInJobs, nbInsertionsInJobs, verbose);
+		ThreadPool threadPool = new ThreadPool(nbJobs, nbWorkers, maxNbInsertionsInJobs, nbInsertionsInJobs);
 		threadPool.execute();
 
 	}
