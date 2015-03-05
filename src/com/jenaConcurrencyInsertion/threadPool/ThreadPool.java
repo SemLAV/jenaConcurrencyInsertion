@@ -1,5 +1,7 @@
 package com.jenaConcurrencyInsertion.threadPool;
 
+import com.jenaConcurrencyInsertion.singleton.GlobalModel;
+
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -12,11 +14,11 @@ public class ThreadPool {
 	private int maxNbInsertionsInJobs_;
 	private int nbInsertionsInJobs_;
 	
-	 public ThreadPool(int nbJobs, int nbWorkers, int maxNbInsertionsInJobs, int nbInsertionsInJobs) {
-		  nbJobs_ = nbJobs;
-	      nbWorkers_ = nbWorkers;
-	      maxNbInsertionsInJobs_ = maxNbInsertionsInJobs;
-	      nbInsertionsInJobs_ = nbInsertionsInJobs;
+	 public ThreadPool() {
+		  nbJobs_ = GlobalModel.nbJobs;
+	      nbWorkers_ = GlobalModel.nbWorkers;
+	      maxNbInsertionsInJobs_ = GlobalModel.maxNbInsertionsInJobs;
+	      nbInsertionsInJobs_ = GlobalModel.nbInsertionsInJobs;
 		 
 	      startIndexes_ = new ArrayList<Integer>();
 	      for (int i = 0; i <= nbJobs_; i++){

@@ -13,6 +13,10 @@ public class GlobalModel {
 	public static long nbLockRead = 0;
 	public static double avgLockRead = 0.0;
 	public static boolean isLockSRMW = true;
+    public static int nbWorkers = 50;
+    public static int nbJobs = 100;
+    public static int maxNbInsertionsInJobs = 100000000;
+    public static int nbInsertionsInJobs = 100000000;
 
 	private GlobalModel() {
 

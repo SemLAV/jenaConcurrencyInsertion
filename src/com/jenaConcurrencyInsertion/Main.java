@@ -5,6 +5,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.jenaConcurrencyInsertion.singleton.GlobalModel;
 import com.jenaConcurrencyInsertion.threadPool.ThreadPool;
 import com.jenaConcurrencyInsertion.threads.LockLogThread;
 import com.jenaConcurrencyInsertion.threads.QueryThread;
@@ -16,15 +17,10 @@ public class Main {
 
 		DateFormat dateFormat_ = new SimpleDateFormat("HH:mm:ss");
 
-		WriteFile.write("[" + dateFormat_.format(new Date())+ "] Start Process \n");
 
-		// Nb views
-		int nbJobs = 100;
 		// Nb threads
-		int nbWorkers = 5;
-		// Size of the views
-		int maxNbInsertionsInJobs = 100000000;
-		int nbInsertionsInJobs = 100000000;
+		GlobalModel.nbWorkers = 50; // 10 et 50 //
+
 
 		Thread t = new Thread(new QueryThread());
 		t.start();
@@ -33,7 +29,7 @@ public class Main {
 		Thread tModel = new Thread(new LockLogThread());
 		tModel.start();
 
-		ThreadPool threadPool = new ThreadPool(nbJobs, nbWorkers, maxNbInsertionsInJobs, nbInsertionsInJobs);
+		ThreadPool threadPool = new ThreadPool();
 		threadPool.execute();
 
 	}
