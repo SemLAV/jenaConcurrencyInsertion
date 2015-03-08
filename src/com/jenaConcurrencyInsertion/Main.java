@@ -17,15 +17,12 @@ public class Main {
 
 		DateFormat dateFormat_ = new SimpleDateFormat("HH:mm:ss");
 
-		//WriteFile.write("[" + dateFormat_.format(new Date())+ "] Start Process \n");
 
-		// Nb views
-		int nbJobs = 100;
+		WriteFile.write("Number of queries \tDuration since launch\tLock time\n");
+
 		// Nb threads
-		int nbWorkers = 5;
-		// Size of the views
-		int maxNbInsertionsInJobs = 100000000;
-		int nbInsertionsInJobs = 100000000;
+		GlobalModel.nbWorkers = 5; // 10 et 20 //
+
 
 		GlobalModel.startTime = System.currentTimeMillis();
 		Thread t = new Thread(new QueryThread());
@@ -35,7 +32,7 @@ public class Main {
 		//Thread tModel = new Thread(new LockLogThread());
 		//tModel.start();
 
-		ThreadPool threadPool = new ThreadPool(nbJobs, nbWorkers, maxNbInsertionsInJobs, nbInsertionsInJobs);
+		ThreadPool threadPool = new ThreadPool();
 		threadPool.execute();
 
 	}
