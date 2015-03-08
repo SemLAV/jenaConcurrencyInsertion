@@ -42,7 +42,7 @@ public class WorkerThread implements Runnable {
 						model_.enterCriticalSection(LockSRMW.WRITE);
 					else
 						model_.enterCriticalSection(LockMRSW.WRITE);
-					GlobalModel.avgLockWrite = (GlobalModel.avgLockWrite*GlobalModel.nbLockWrite+System.currentTimeMillis() - start)/++GlobalModel.nbLockWrite;
+					//GlobalModel.avgLockWrite = (GlobalModel.avgLockWrite*GlobalModel.nbLockWrite+System.currentTimeMillis() - start)/++GlobalModel.nbLockWrite;
 					//System.out.println(System.currentTimeMillis() - start);
 //
 					Resource ressource = model_.createResource("uri_" + i);

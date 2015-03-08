@@ -21,7 +21,7 @@ public class LockLogThread implements Runnable {
 		
 		long modelSize = GlobalModel.getInstance().size();
 		
-		WriteFile.write(GlobalModel.nbLockWrite+ "\t" + GlobalModel.avgLockWrite + "\t" + GlobalModel.nbLockRead + "\t" + GlobalModel.avgLockRead + "\n");
+		//WriteFile.write(GlobalModel.nbLockWrite+ "\t" + GlobalModel.avgLockWrite + "\t" + GlobalModel.nbLockRead + "\t" + GlobalModel.avgLockRead + "\n");
 		
 		try {
 			Thread.sleep(10000);

@@ -8,8 +8,7 @@ import com.hp.hpl.jena.shared.LockSRMW;
 public class GlobalModel {
 
 	private static Model model_ = null;
-	public static long nbLockWrite = 0;
-	public static double avgLockWrite = 0.0;
+	public static long startTime = 0;
 	public static long nbLockRead = 0;
 	public static double avgLockRead = 0.0;
 	public static boolean isLockSRMW = true;
