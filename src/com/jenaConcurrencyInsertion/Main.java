@@ -17,12 +17,13 @@ public class Main {
 
 		DateFormat dateFormat_ = new SimpleDateFormat("HH:mm:ss");
 
+		System.out.println(args[0]+ " "+ args[1]);
+		// Nb threads
+		GlobalModel.nbWorkers = Integer.valueOf(args[0]); // 10 et 20 //
+
+		GlobalModel.isLockSRMW = Boolean.valueOf(args[1]);
 
 		WriteFile.write("Number of queries \tDuration since launch\tLock time\n");
-
-		// Nb threads
-		GlobalModel.nbWorkers = 5; // 10 et 20 //
-
 
 		GlobalModel.startTime = System.currentTimeMillis();
 		Thread t = new Thread(new QueryThread());
