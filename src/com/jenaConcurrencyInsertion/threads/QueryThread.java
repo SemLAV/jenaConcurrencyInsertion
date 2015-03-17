@@ -59,6 +59,9 @@ public class QueryThread implements Runnable {
 			GlobalModel.avgLockRead = (GlobalModel.avgLockRead*GlobalModel.nbLockRead+System.currentTimeMillis() - start)/++GlobalModel.nbLockRead;
 
 			WriteFile.write( GlobalModel.nbLockRead + "\t" + (start-GlobalModel.startTime) + "\t" + GlobalModel.avgLockRead+ "\n");
+			
+			if(start>=GlobalModel.finishTime)
+				System.exit(0);
 
 			String queryString = "PREFIX foaf: <http://xmlns.com/foaf/0.1/>"
 					+ "SELECT * " + "WHERE { 'uri_100' ?p ?o}";

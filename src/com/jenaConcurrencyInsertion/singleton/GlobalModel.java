@@ -16,6 +16,7 @@ public class GlobalModel {
     public static int nbJobs = 100;
     public static int maxNbInsertionsInJobs = 100000000;
     public static int nbInsertionsInJobs = 100000000;
+    public static long finishTime;
 
 	private GlobalModel() {
 

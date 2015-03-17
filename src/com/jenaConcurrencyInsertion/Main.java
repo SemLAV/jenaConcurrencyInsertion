@@ -22,6 +22,7 @@ public class Main {
 		GlobalModel.nbWorkers = Integer.valueOf(args[0]); // 10 et 20 //
 
 		GlobalModel.isLockSRMW = Boolean.valueOf(args[1]);
+		GlobalModel.finishTime = System.currentTimeMillis()+(Integer.valueOf(args[2])*60000);
 
 		WriteFile.write("Number of queries \tDuration since launch\tLock time\n");
 
